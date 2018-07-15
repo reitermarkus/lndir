@@ -7,7 +7,6 @@ extern crate regex;
 extern crate mktemp;
 extern crate lndir;
 
-use std::env::temp_dir;
 use std::path::PathBuf;
 use mktemp::Temp;
 
@@ -23,13 +22,11 @@ impl std::default::Default for World {
   }
 }
 
-
 mod example_steps {
   use std::collections::BTreeMap;
   use std::path::PathBuf;
   use std::fs::create_dir_all;
   use std::fs::read_link;
-  use std::fs::remove_dir_all;
   use std::fs::File;
   use std::ffi::OsStr;
   use lndir::lndir;
