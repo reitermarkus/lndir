@@ -1,0 +1,16 @@
+[package]
+name = "lndir"
+version = "0.1.0"
+authors = ["Markus Reiter <me@reitermark.us>"]
+
+[dependencies]
+indoc = "0.2"
+
+[[test]]
+name = "cucumber"
+harness = false # Allows Cucumber to print output instead of libtest
+
+[dev-dependencies]
+cucumber_rust = "0.3.3"
+regex = "1"
+mktemp = "0.3.1"
