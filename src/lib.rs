@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 use options::Options;
 
 use std::io;
-use std::fs::{remove_file, remove_dir, create_dir_all};
+use std::fs::{remove_file, remove_dir, create_dir_all, read_link};
 use std::os::unix::fs::symlink;
 
 pub mod argument_error;
@@ -14,7 +14,7 @@ pub mod options;
 pub fn lndir(sources: Vec<PathBuf>, destination: PathBuf, options: Option<Options>) -> Result<(), io::Error> {
   let options = options.unwrap_or_default();
 
-  //panic!("options: {:?}\nsources: {:?}\ndestination: {:?}", options, sources, destination);
+  //println!("options: {:?}\nsources: {:?}\ndestination: {:?}", options, sources, destination);
 
   // Ensure that destination directory exists.
   destination.read_dir()?;
@@ -41,18 +41,26 @@ pub fn lndir(sources: Vec<PathBuf>, destination: PathBuf, options: Option<Option
     let source_path = source.canonicalize()?.join(relative_path);
     let destination_path = destination.canonicalize()?.join(relative_path);
 
-    if !options.silent {
-      println!("{}", source_path.to_str().unwrap());
-    }
-
-    if destination_path.symlink_metadata().is_ok() || destination_path.is_file() {
-      remove_file(&destination_path)?;
-    } else if destination_path.is_dir() {
-      remove_dir(&destination_path)?;
-    }
-
     create_dir_all(destination_path.parent().unwrap())?;
-    symlink(&source_path, &destination_path)?;
+
+    if let Ok(symlink_metadata) = destination_path.symlink_metadata() {
+      if symlink_metadata.file_type().is_dir() {
+        remove_dir(&destination_path)?;
+      } else {
+        remove_file(&destination_path)?;
+      }
+    }
+
+    if !options.ignore_links && source_path.symlink_metadata()?.file_type().is_symlink() {
+      let link_source = read_link(&source_path).unwrap();
+      symlink(&link_source, &destination_path)?;
+    } else {
+      symlink(&source_path, &destination_path)?;
+    }
+
+    if !options.silent {
+      println!("{}:", source_path.to_str().unwrap());
+    }
   }
 
   Ok(())

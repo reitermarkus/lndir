@@ -30,6 +30,7 @@ mod example_steps {
   use std::fs::File;
   use std::ffi::OsStr;
   use lndir::lndir;
+  use std::os::unix::fs::symlink;
 
   fn parse_directory_tree(string: &String) -> Vec<PathBuf> {
     let mut lines = string.lines();
@@ -79,6 +80,16 @@ mod example_steps {
     paths
   }
 
+  fn split_path(path: PathBuf) -> (PathBuf, Option<PathBuf>) {
+    let relative_path = path.strip_prefix(".").unwrap();
+    let parts: Vec<PathBuf> = path.to_str().unwrap().split(" → ").map(PathBuf::from).collect();
+
+    let relative_path = parts[0].strip_prefix(".").unwrap().to_owned();
+    let relative_symlink_path = parts.get(1).map(PathBuf::to_owned);
+
+    (relative_path, relative_symlink_path)
+  }
+
   steps! {
     world: ::World; // Any type that implements Default can be the world
 
@@ -88,12 +99,16 @@ mod example_steps {
       let paths = parse_directory_tree(&docstring);
 
       for path in paths {
-        let relative_path = path.strip_prefix(".").unwrap();
-        let absolute_path = world.tmpdir.join(relative_path);
+        let (relative_path, relative_symlink_path) = split_path(path);
+
+        let absolute_path = world.tmpdir.join(&relative_path);
 
         let file_name = absolute_path.file_name().and_then(OsStr::to_str).unwrap();
 
-        if file_name.ends_with(".d") {
+        if let Some(relative_symlink_path) = relative_symlink_path {
+          create_dir_all(&absolute_path.parent().unwrap()).unwrap();
+          symlink(&relative_symlink_path, &absolute_path).unwrap();
+        } else if file_name.ends_with(".d") {
           create_dir_all(&absolute_path).unwrap();
         } else {
           create_dir_all(&absolute_path.parent().unwrap()).unwrap();
@@ -119,27 +134,29 @@ mod example_steps {
       let paths = parse_directory_tree(&docstring);
 
       for path in paths {
-        let parts: Vec<String> = path.to_str().unwrap().split(" → ").map(str::to_string).collect();
+       let (relative_path, relative_symlink_path) = split_path(path);
 
-        let relative_path = PathBuf::from(parts[0].to_owned());
-        let relative_path = relative_path.strip_prefix(".").unwrap();
-        let relative_symlink_path = parts.get(1).to_owned();
-        let absolute_symlink_path = relative_symlink_path.map(|path| world.tmpdir.join(path).canonicalize().unwrap());
-        let absolute_path = world.tmpdir.join(relative_path);
+       let absolute_path = world.tmpdir.join(relative_path.to_owned());
+       let dir = absolute_path.parent().unwrap();
+       let absolute_symlink_path = relative_symlink_path.to_owned().map(|path| dir.join(path));
 
-        let file_name = absolute_path.file_name().and_then(OsStr::to_str).unwrap();
+       let file_name = absolute_path.file_name().and_then(OsStr::to_str).unwrap();
 
-        if let Some(absolute_symlink_path) = absolute_symlink_path {
-          if let Ok(symlink_path) = read_link(&absolute_path) {
-            assert_eq!(symlink_path, absolute_symlink_path);
-          } else {
-            panic!("{} is not a symlink.", relative_path.to_string_lossy());
-          }
-        } else if file_name.ends_with(".d") {
-          assert!(absolute_path.is_dir(), format!("{} is not a directory.", relative_path.to_string_lossy()));
-        } else {
-          assert!(absolute_path.is_file(), format!("{} is not a file.", relative_path.to_string_lossy()));
-        }
+       if let Some(relative_symlink_path) = relative_symlink_path {
+         if let Ok(symlink_path) = read_link(&absolute_path) {
+           if relative_symlink_path.starts_with("..") {
+             assert_eq!(dir.join(symlink_path).canonicalize().unwrap(), absolute_symlink_path.unwrap().canonicalize().unwrap());
+           } else {
+             assert_eq!(symlink_path, relative_symlink_path);
+           }
+         } else {
+           panic!("{} is not a symlink.", relative_path.to_string_lossy());
+         }
+       } else if file_name.ends_with(".d") {
+         assert!(absolute_path.is_dir(), format!("{} is not a directory.", relative_path.to_string_lossy()));
+       } else {
+         assert!(absolute_path.is_file(), format!("{} is not a file.", relative_path.to_string_lossy()));
+       }
       }
     };
   }
