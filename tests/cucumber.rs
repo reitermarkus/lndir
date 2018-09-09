@@ -81,7 +81,6 @@ mod example_steps {
   }
 
   fn split_path(path: PathBuf) -> (PathBuf, Option<PathBuf>) {
-    let relative_path = path.strip_prefix(".").unwrap();
     let parts: Vec<PathBuf> = path.to_str().unwrap().split(" → ").map(PathBuf::from).collect();
 
     let relative_path = parts[0].strip_prefix(".").unwrap().to_owned();
@@ -117,7 +116,7 @@ mod example_steps {
       }
     };
 
-    when regex r"I run `lndir\s+([^`]*)`" |world, matches, step| {
+    when regex r"I run `lndir\s+([^`]*)`" |world, matches, _step| {
       let mut arguments: Vec<PathBuf> = matches[1].split(" ").map(|arg| world.tmpdir.join(PathBuf::from(arg))).collect();
 
       let len = arguments.len();
