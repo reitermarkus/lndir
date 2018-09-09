@@ -2,9 +2,6 @@
 
 extern crate lndir;
 
-#[macro_use]
-extern crate indoc;
-
 use std::vec::Vec;
 use std::path::PathBuf;
 use std::env;
