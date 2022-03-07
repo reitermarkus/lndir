@@ -3,7 +3,7 @@ use std::error::Error;
 #[derive(Debug)]
 pub struct ArgumentError {
   description: String,
-  cause: Option<Box<Error>>,
+  cause: Option<Box<dyn Error>>,
 }
 
 impl ArgumentError {
@@ -23,7 +23,7 @@ impl Error for ArgumentError {
     &self.description
   }
 
-  fn cause(&self) -> Option<&Error> {
+  fn cause(&self) -> Option<&dyn Error> {
     if let Some(ref err) = self.cause {
       Some(err.as_ref())
     } else {
