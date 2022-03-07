@@ -36,7 +36,7 @@ fn parse_args<'a>() -> Result<(Options, Vec<PathBuf>, PathBuf), ArgumentError> {
             options.max_depth = match value.parse() {
               Ok(max_depth) => Some(max_depth),
               Err(err) => return Err(ArgumentError::new(
-                format!("failed to parse -maxdepth argument \"{}\": {}", value, err.description()),
+                format!("failed to parse -maxdepth argument \"{}\": {}", value, err),
                 Some(Box::new(err)),
               )),
             }
