@@ -8,7 +8,7 @@ pub struct ArgumentError {
 
 impl ArgumentError {
   pub fn new<S: Into<String>>(description: S, cause: Option<Box<dyn Error>>) -> Self {
-    Self { description: description.into(), cause: cause }
+    Self { description: description.into(), cause }
   }
 }
 use std::fmt;
