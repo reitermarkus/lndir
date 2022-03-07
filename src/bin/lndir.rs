@@ -10,9 +10,7 @@ use lndir::lndir;
 use lndir::options::Options;
 use lndir::argument_error::ArgumentError;
 
-use std::error::Error;
-
-fn parse_args<'a>() -> Result<(Options, Vec<PathBuf>, PathBuf), ArgumentError> {
+fn parse_args() -> Result<(Options, Vec<PathBuf>, PathBuf), ArgumentError> {
   let mut options = Options::new();
   let mut paths: Vec<PathBuf> = Vec::new();
 
