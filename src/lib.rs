@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::ffi::OsStr;
 use std::collections::BTreeMap;
 
