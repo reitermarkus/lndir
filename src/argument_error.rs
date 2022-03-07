@@ -7,13 +7,13 @@ pub struct ArgumentError {
 }
 
 impl ArgumentError {
-  pub fn new<S: Into<String>>(description: S, cause: Option<Box<Error>>) -> Self {
+  pub fn new<S: Into<String>>(description: S, cause: Option<Box<dyn Error>>) -> Self {
     Self { description: description.into(), cause: cause }
   }
 }
 use std::fmt;
 impl fmt::Display for ArgumentError {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(f, "ArgumentError")
   }
 }
