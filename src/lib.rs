@@ -66,7 +66,7 @@ pub fn lndir(sources: Vec<PathBuf>, destination: PathBuf, options: Option<Option
   Ok(())
 }
 
-fn is_rev_info(path: &PathBuf) -> bool {
+fn is_rev_info(path: &Path) -> bool {
   if let Some(file_name) = path.file_name().and_then(OsStr::to_str) {
     match file_name.as_ref() {
       "BitKeeper" => return true,
@@ -84,7 +84,7 @@ fn is_rev_info(path: &PathBuf) -> bool {
   false
 }
 
-fn entries(dir: &PathBuf, depth: u32, max_depth: Option<u32>) -> Result<Vec<PathBuf>, io::Error> {
+fn entries(dir: &Path, depth: u32, max_depth: Option<u32>) -> Result<Vec<PathBuf>, io::Error> {
   match max_depth {
     Some(max_depth) if depth > max_depth => return Ok(Vec::new()),
     _ => (),
