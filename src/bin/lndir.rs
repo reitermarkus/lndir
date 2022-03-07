@@ -86,7 +86,7 @@ fn parse_args<'a>() -> Result<(Options, Vec<PathBuf>, PathBuf), ArgumentError> {
 }
 
 fn main() -> Result<(), ArgumentError> {
-  let program = env::args().nth(0).unwrap();
+  let program = env::args().next().unwrap();
 
   let (options, sources, destination) = parse_args()?;
 
