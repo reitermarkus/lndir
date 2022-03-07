@@ -22,7 +22,7 @@ pub fn lndir(sources: Vec<PathBuf>, destination: PathBuf, options: Option<Option
   let mut entry_map: BTreeMap<PathBuf, PathBuf> = BTreeMap::new();
 
   for source in sources {
-    let mut entries = entries(&source, 1, options.max_depth)?;
+    let entries = entries(&source, 1, options.max_depth)?;
 
     for entry in entries.iter() {
       let relative_entry = entry.strip_prefix(&source).unwrap().to_owned();
@@ -68,7 +68,7 @@ pub fn lndir(sources: Vec<PathBuf>, destination: PathBuf, options: Option<Option
 
 fn is_rev_info(path: &Path) -> bool {
   if let Some(file_name) = path.file_name().and_then(OsStr::to_str) {
-    match file_name.as_ref() {
+    match file_name {
       "BitKeeper" => return true,
       "CVS"       => return true,
       "CVS.adm"   => return true,
