@@ -2,6 +2,7 @@
 name = "lndir"
 version = "0.1.0"
 authors = ["Markus Reiter <me@reitermark.us>"]
+edition = "2021"
 
 [[test]]
 name = "cucumber"
