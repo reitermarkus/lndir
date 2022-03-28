@@ -11,7 +11,7 @@ harness = false # Allows Cucumber to print output instead of libtest
 [dev-dependencies]
 async-trait = "0.1.52"
 cucumber = "0.12.0"
-gherkin = "0.11.1"
+gherkin = "0.12.0"
 regex = "1"
 mktemp = "0.4.0"
 tokio = { version = "1.17.0", features = ["rt", "rt-multi-thread", "macros"] }
