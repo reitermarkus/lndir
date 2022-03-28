@@ -5,8 +5,7 @@ use std::ffi::OsStr;
 use std::os::unix::fs::symlink;
 
 use async_trait::async_trait;
-use cucumber::{given, then, when, WorldInit};
-use gherkin::Step;
+use cucumber::{given, then, when, WorldInit, gherkin::Step};
 use mktemp::Temp;
 
 use lndir::lndir;
