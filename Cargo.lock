@@ -146,7 +146,7 @@ dependencies = [
  "derive_more",
  "either",
  "futures",
- "gherkin",
+ "gherkin 0.11.2",
  "globwalk",
  "inventory",
  "itertools",
@@ -333,6 +333,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "gherkin"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "98ab17bb865b7c4fbca5133801229aeb127e254a47c29fd26968195fce9458ab"
+dependencies = [
+ "heck 0.3.3",
+ "peg",
+ "quote",
+ "serde",
+ "serde_json",
+ "syn",
+ "textwrap 0.12.1",
+ "thiserror",
+ "typed-builder",
+]
+
+[[package]]
 name = "ghost"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -480,7 +497,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "cucumber",
- "gherkin",
+ "gherkin 0.12.0",
  "mktemp",
  "regex",
  "tokio",
