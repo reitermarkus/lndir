@@ -133,9 +133,9 @@ dependencies = [
 
 [[package]]
 name = "cucumber"
-version = "0.12.2"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e40efb9b1c7c06409622b49091ec00d734ea03dc596e9cd9056f7e74d8c52b0"
+checksum = "399fa7fc41ab7163fc49d5c2613b582b04bbf2d5342fcb1946fc1efd5b71193c"
 dependencies = [
  "async-trait",
  "atty",
@@ -158,9 +158,9 @@ dependencies = [
 
 [[package]]
 name = "cucumber-codegen"
-version = "0.12.2"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98e09d09a5ab5f3b70e3525a9b89febc673899df7c5ab78ffeafd31632520e7a"
+checksum = "6a6f939adacd640286fb794ec392c068367991795db4c2c9112b748fb4fbf04f"
 dependencies = [
  "cucumber-expressions",
  "inflections",
@@ -317,9 +317,9 @@ dependencies = [
 
 [[package]]
 name = "gherkin"
-version = "0.11.2"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7916b3cc60fa87903b2d62fbe7fd9c346fb9f8d4cb8d1717c482b37605016ad"
+checksum = "98ab17bb865b7c4fbca5133801229aeb127e254a47c29fd26968195fce9458ab"
 dependencies = [
  "heck 0.3.3",
  "peg",
