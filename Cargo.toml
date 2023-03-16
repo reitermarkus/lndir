@@ -13,4 +13,4 @@ async-trait = "0.1.52"
 cucumber = "0.13.0"
 regex = "1"
 mktemp = "0.4.0"
-tokio = { version = "1.17.0", features = ["rt", "rt-multi-thread", "macros"] }
+tokio = { version = "1.18.5", features = ["rt", "rt-multi-thread", "macros"] }
